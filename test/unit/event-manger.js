@@ -62,4 +62,26 @@ describe('event-manger.js', () => {
             expect(result).to.eql([expected+ '_0', expected+ '_1']);
         });
     });
+
+    describe('pub sub', () => {
+        it('should pub then sub', () => {
+            const em = EventManger.getInstance();
+            const expected = Math.random();
+            const key = 'chan_' + Math.random();
+            em.publish(key, expected);
+            const result = em.subscribe(key);
+
+            expect(result).to.eql(expected);
+        });
+
+        it('should not sub and pub', () => {
+            const em = EventManger.getInstance();
+            const expected = Math.random();
+            const key = 'chan_' + Math.random();
+            
+            const result = em.subscribe(key);
+            em.publish(key, expected);
+            expect(result).to.eql(null);
+        });
+    });
 });

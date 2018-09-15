@@ -4,6 +4,19 @@ var EventManager = (function() {
 
     function em() {
         this.events = {};
+        this.channels = {};
+
+        this.publish = function(key, item) {
+             this.channels[key] = item;
+             return true;
+        }
+
+        this.subscribe = function(key) {
+             if (undefined === this.channels[key]) {
+                  return null;
+             }
+             return this.channels[key];
+        }
 
         this.on = function(key, callback) {
                     if (undefined === this.events[key]) {
