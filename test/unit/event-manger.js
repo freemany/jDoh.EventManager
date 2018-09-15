@@ -74,16 +74,16 @@ describe('event-manger.js', () => {
             });
         });
 
-        it('should not sub and pub', () => {
+        it('should sub and pub', () => {
             const em = EventManger.getInstance();
             const expected = Math.random();
             const key = 'chan_' + Math.random();
-            
-            const result = em.subscribe(key);
-            em.publish(key, expected);
-            expect(result).to.eql(null);
-        });
 
+            em.subscribe(key, (result) => {
+                expect(result).to.eql(expected);
+            });
+            em.publish(key, expected);
+        });
 
         it('should pub then sub in EventManager I', () => {
             const em = EventManger;
@@ -101,6 +101,42 @@ describe('event-manger.js', () => {
             const key = 'chan_' + Math.random();
             em.pub(key, expected);
             em.sub(key, function(result) {
+                expect(result).to.eql(expected);
+            });
+        });
+
+        it('should pub then multi sub', () => {
+            const em = EventManger;
+            const expected = Math.random();
+            const key = 'chan_' + Math.random();
+
+            em.publish(key, expected);
+            em.subscribe(key, function(result) {
+                expect(result).to.eql(expected);
+            });
+            em.subscribe(key, function(result) {
+                expect(result).to.eql(expected);
+            });
+            em.subscribe(key, function(result) {
+                expect(result).to.eql(expected);
+            });
+        });
+
+        it('should multi sub before or after pub', () => {
+            const em = EventManger;
+            const expected = Math.random();
+            const key = 'chan_' + Math.random();
+
+            em.subscribe(key, function(result) {
+                expect(result).to.eql(expected);
+            });
+            em.subscribe(key, function(result) {
+                expect(result).to.eql(expected);
+            });
+
+            em.publish(key, expected);
+
+            em.subscribe(key, function(result) {
                 expect(result).to.eql(expected);
             });
         });

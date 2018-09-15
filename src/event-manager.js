@@ -5,17 +5,32 @@ var EventManager = (function() {
     function em() {
         this.events = {};
         this.channels = {};
+        this.pubSubPromise = {};
 
         this.publish = function(key, item) {
-             this.channels[key] = item;
-             return true;
+            if (undefined === this.pubSubPromise[key]) {
+                this.pubSubPromise[key] = {}; 
+                this.pubSubPromise[key]['p'] = new Promise((resolve) => {
+                    this.pubSubPromise[key]['r'] = resolve;
+                    resolve(item);
+                })
+            } else {
+                this.pubSubPromise[key]['r'](item);
+            }
         }
 
         this.subscribe = function(key, callback) {
              if (undefined === this.channels[key] || typeof callback !== 'function') {
-                  return null;
+                return null;
              }
-             return callback.call(this, this.channels[key]);
+
+             if (undefined === this.pubSubPromise[key]) {
+                this.pubSubPromise[key] = {}; 
+                this.pubSubPromise[key]['p'] = new Promise((resolve) => {
+                    this.pubSubPromise[key]['r'] = resolve;
+                })
+            }
+            this.pubSubPromise[key]['p'].then(callback);
         }
 
         this.on = function(key, callback) {
