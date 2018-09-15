@@ -11,11 +11,11 @@ var EventManager = (function() {
              return true;
         }
 
-        this.subscribe = function(key) {
-             if (undefined === this.channels[key]) {
+        this.subscribe = function(key, callback) {
+             if (undefined === this.channels[key] || typeof callback !== 'function') {
                   return null;
              }
-             return this.channels[key];
+             return callback.call(this, this.channels[key]);
         }
 
         this.on = function(key, callback) {
@@ -58,10 +58,24 @@ var EventManager = (function() {
                 return getInstance().trigger(key, params);
         }
 
+        function publish(key, item) {
+            return getInstance().publish(key, item);
+        }
+
+        function subscribe(key, callback) {
+            return getInstance().subscribe(key, callback);
+        }
+
         return {
                 getInstance: getInstance,
                 on: on,
+                attach: on,
                 trigger: trigger,
+                emit: trigger,
+                publish: publish,
+                pub: publish,
+                subscribe: subscribe,
+                sub: subscribe,
         }
 })();
 

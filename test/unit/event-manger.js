@@ -69,9 +69,9 @@ describe('event-manger.js', () => {
             const expected = Math.random();
             const key = 'chan_' + Math.random();
             em.publish(key, expected);
-            const result = em.subscribe(key);
-
-            expect(result).to.eql(expected);
+            em.subscribe(key, function(result) {
+                expect(result).to.eql(expected);
+            });
         });
 
         it('should not sub and pub', () => {
@@ -82,6 +82,27 @@ describe('event-manger.js', () => {
             const result = em.subscribe(key);
             em.publish(key, expected);
             expect(result).to.eql(null);
+        });
+
+
+        it('should pub then sub in EventManager I', () => {
+            const em = EventManger;
+            const expected = Math.random();
+            const key = 'chan_' + Math.random();
+            em.publish(key, expected);
+            em.subscribe(key, function(result) {
+                expect(result).to.eql(expected);
+            });
+        });
+
+        it('should pub then sub in EventManager II', () => {
+            const em = EventManger;
+            const expected = Math.random();
+            const key = 'chan_' + Math.random();
+            em.pub(key, expected);
+            em.sub(key, function(result) {
+                expect(result).to.eql(expected);
+            });
         });
     });
 });
