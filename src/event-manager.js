@@ -1,4 +1,3 @@
-
 var EventManager = (function() {
     var _instance;
 
@@ -19,8 +18,8 @@ var EventManager = (function() {
             }
         }
 
-        this.subscribe = function(key, callback) {
-             if (undefined === this.channels[key] || typeof callback !== 'function') {
+        this.subscribe = function(key, callback) { 
+             if (typeof callback !== 'function') {
                 return null;
              }
 
@@ -29,7 +28,7 @@ var EventManager = (function() {
                 this.pubSubPromise[key]['p'] = new Promise((resolve) => {
                     this.pubSubPromise[key]['r'] = resolve;
                 })
-            }
+            } 
             this.pubSubPromise[key]['p'].then(callback);
         }
 

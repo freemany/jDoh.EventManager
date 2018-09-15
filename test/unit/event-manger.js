@@ -126,7 +126,7 @@ describe('event-manger.js', () => {
             const em = EventManger;
             const expected = Math.random();
             const key = 'chan_' + Math.random();
-
+      
             em.subscribe(key, function(result) {
                 expect(result).to.eql(expected);
             });
