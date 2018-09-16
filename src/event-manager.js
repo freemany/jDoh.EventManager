@@ -7,7 +7,7 @@ var EventManager = (function() {
         this.pubSubPromise = {};
 
         this.publish = function(key, item) {
-            if (undefined === this.pubSubPromise[key]) {
+            if (undefined === this.pubSubPromise[key] || true === this.pubSubPromise[key]['published']) {
                 this.pubSubPromise[key] = {}; 
                 this.pubSubPromise[key]['p'] = new Promise((resolve) => {
                     this.pubSubPromise[key]['r'] = resolve;
@@ -16,6 +16,8 @@ var EventManager = (function() {
             } else {
                 this.pubSubPromise[key]['r'](item);
             }
+
+            this.pubSubPromise[key]['published'] = true;
         }
 
         this.subscribe = function(key, callback) { 
