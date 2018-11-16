@@ -140,5 +140,24 @@ describe('event-manger.js', () => {
                 expect(result).to.eql(expected);
             });
         });
+
+        it('should multi pub', () => {
+            const em = EventManger;
+            const expected = Math.random();
+            const expected1 = Math.random();
+            const key = 'chan_' + Math.random();
+      
+            em.subscribe(key, function(result) {
+                expect(result).to.eql(expected);
+            });
+
+            em.publish(key, expected);
+
+            em.publish(key, expected1);
+
+            em.subscribe(key, function(result) {
+                expect(result).to.eql(expected1);
+            });
+        });
     });
 });
