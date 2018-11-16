@@ -1,5 +1,3 @@
-const $ = require('jquery-deferred');
-
 var EventManager = (function() {
     var _instance;
 
@@ -9,17 +7,15 @@ var EventManager = (function() {
         this.pubSubPromise = {};
 
         this.publish = function(key, item) {
-            if (undefined === this.pubSubPromise[key] || true === this.pubSubPromise[key]['published']) {
+            if (undefined === this.pubSubPromise[key]) {
                 this.pubSubPromise[key] = {}; 
-                var defer = $.Deferred();
-                this.pubSubPromise[key]['r'] = defer.resolve;
-                defer.resolve(item);
-                this.pubSubPromise[key]['p'] = defer.promise();
+                this.pubSubPromise[key]['p'] = new Promise((resolve) => {
+                    this.pubSubPromise[key]['r'] = resolve;
+                    resolve(item);
+                })
             } else {
                 this.pubSubPromise[key]['r'](item);
             }
-
-            this.pubSubPromise[key]['published'] = true;
         }
 
         this.subscribe = function(key, callback) { 
@@ -29,9 +25,9 @@ var EventManager = (function() {
 
              if (undefined === this.pubSubPromise[key]) {
                 this.pubSubPromise[key] = {}; 
-                var defer = $.Deferred();
-                this.pubSubPromise[key]['r'] = defer.resolve;
-                this.pubSubPromise[key]['p'] = defer.promise();
+                this.pubSubPromise[key]['p'] = new Promise((resolve) => {
+                    this.pubSubPromise[key]['r'] = resolve;
+                })
             } 
             this.pubSubPromise[key]['p'].then(callback);
         }
@@ -97,4 +93,8 @@ var EventManager = (function() {
         }
 })();
 
-module.exports = EventManager;
+EventManager.publish('freeman', 999);
+
+EventManager.subscribe('freeman', (res) => {
+   console.log(res);
+});

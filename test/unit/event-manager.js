@@ -1,6 +1,6 @@
 const EventManger = require('../../src/event-manager.js');
 
-describe('event-manger.js', () => {
+describe('event-manager.js', () => {
     describe('constructor', () => {
         it('should have instance', () => {
             const em = EventManger.getInstance();

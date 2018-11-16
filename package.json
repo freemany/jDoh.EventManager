@@ -26,5 +26,8 @@
   },
   "directories": {
     "test": "test"
+  },
+  "dependencies": {
+    "jquery-deferred": "^0.3.1"
   }
 }
