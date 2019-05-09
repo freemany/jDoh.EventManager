@@ -34,4 +34,5 @@ const sub = (key, callback) => {
 };
 
 // export {pub, sub};
-module.exports = {pub, sub};
+// module.exports = {pub, sub};
+export default {pub, sub};
